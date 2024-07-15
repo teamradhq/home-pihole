@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+SERVICE_NAME=pihole
+
+if [ "$(docker ps -q -f name=$SERVICE_NAME)" ]; then
+    SERVICE_RUNNING=true
+    echo "PHP is running."
+else
+    SERVICE_RUNNING=false
+    docker compose up -d --build $SERVICE_NAME
+fi
+
+docker compose exec -it $SERVICE_NAME pihole "$@"
+
+if [ "$SERVICE_RUNNING" = false ]; then
+    docker compose down $SERVICE_NAME
+fi

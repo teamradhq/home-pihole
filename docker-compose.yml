@@ -1,7 +1,9 @@
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:latest
+    build:
+      context: ./docker/pihole/
+      dockerfile: Dockerfile
     environment:
       TZ: ${PIHOLE_TIMEZONE:-Melbourne/Australia}
       WEBPASSWORD: ${PIHOLE_PASSWORD:-password}
@@ -9,6 +11,7 @@ services:
       - ./docker/pihole/etc/:/etc/pihole/
       - ./docker/pihole/dnsmasq.d/:/etc/dnsmasq.d/
       - ./docker/pihole/log/:/var/log/pihole/
+      - ./docker/pihole/admin/:/var/www/html/admin/
     ports:
       - "${PIHOLE_DNS_PORT:-53}:53/tcp"
       - "${PIHOLE_DNS_PORT:-53}:53/udp"
